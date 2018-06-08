@@ -21,6 +21,9 @@ public class TilesetBuilderV2 {
     private TilesetBuilderV2() {
         File modelDirectory = new File(DIR + File.separator + "Models" + File.separator);
         File output = new File(DIR+File.separator+"Output"+ File.separator);
+
+        if(!output.exists()) output.mkdir();
+
         imageDirectories = new ArrayList<>();
 
         // Hide the ".blend1" files because they're annoying
@@ -153,6 +156,7 @@ public class TilesetBuilderV2 {
         }
         try {
             System.out.println("Backing up directory...");
+            Utils.clearDirectory(new File(BACKUP));
             FileUtils.copyDirectory(new File(DIR), new File(BACKUP));
             System.out.println("Successfully backed up working directory.");
         } catch(IOException e) {
