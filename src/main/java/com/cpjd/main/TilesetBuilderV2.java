@@ -215,9 +215,9 @@ public class TilesetBuilderV2 {
 
                 for(File frame : frames) {
                     index++;
-                    Utils.copy(frame, new File(outputAnimations.getPath() + File.separator + dir.getName() +"_ " + index+".png"));
+                    Utils.copy(frame, new File(outputAnimations.getPath() + File.separator + dir.getName() +"_" + index+".png"));
                     if(meta != null) {
-                        Utils.resizeImage(new File(outputAnimations.getPath() + File.separator + dir.getName() +"_ " + index+".png"), meta.getWidth(), meta.getHeight());
+                        Utils.resizeImage(new File(outputAnimations.getPath() + File.separator + dir.getName() +"_" + index+".png"), meta.getWidth(), meta.getHeight());
                     }
                 }
 
