@@ -23,7 +23,9 @@ and size. Each `Rendered` directory must also contain a `.meta` file (more on th
 4) The program will load images from each `Rendered` directory, resize them, rename them (automatically generating valid IDs), and
  copy them to the `Output` directory. A sprite-sheet is generated for each `Rendered` directory and also saved to output. The sprite-sheets
  are used by Tiled, while the collection of files should be packed by [GDXTexturePacker](https://github.com/crashinvaders/gdx-texture-packer-gui).
-5) The entire working directory is backed up to the specified backup directory. Old backups are overwritten by new ones.
+ 5) The program will check for `/DIR/Animations/Raw`. This directory should contain a list of folders, each with a collection of animation frames. The program will sort, rename, prefix the folder name to the file, reindex, and copy the images to `DIR/Animations/Output`. They will be resized according to `/DIR/Animations/Raw/animations.meta`. Note, this `.meta` file should have
+ the same format as all other `.meta` files, but only the width and height are used. However, the `.meta` must specify all meta attributes. This is a shortcut to save some time coding.
+6) The entire working directory is backed up to the specified backup directory. Old backups are overwritten by new ones.
  
  # .meta Files
  1) These files specify hints to the program. The name of the `.meta` file doesn't matter, so long as it ends in `.meta`. Each `.meta` file should
