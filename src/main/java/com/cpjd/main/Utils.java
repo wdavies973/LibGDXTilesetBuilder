@@ -64,6 +64,8 @@ class Utils {
     }
 
     static void clearDirectory(File f) {
+        if(!f.isDirectory()) return;
+
         File[] files = f.listFiles();
 
         if(files == null || files.length == 0) return;

@@ -3,6 +3,7 @@ package com.cpjd.main;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -154,6 +155,76 @@ public class TilesetBuilderV2 {
             // Rename the file by just prefixing the tileset name to its name
             System.out.println("Processing directory: "+(i + 1)+" / "+toProcess.size());
         }
+
+        /*
+         * Next, handle animations. Look for a directory /Animations/Raw
+         */
+
+        File animations = new File(DIR+File.separator+"Animations"+File.separator+"Raw"+File.separator);
+
+        animation : {if(animations.exists()) {
+
+            // Load animation meta
+            RenderMeta meta;
+            try {
+                meta = Utils.loadMeta(new File(animations+File.separator+"animations.meta"));
+            } catch(Exception e) {
+                meta = null;
+            }
+
+            File[] folders = animations.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return !pathname.getName().contains(".meta");
+                }
+            });
+
+            File outputAnimations = new File(DIR+File.separator+"Animations"+File.separator+"Output"+File.separator);
+
+            if(!outputAnimations.exists()) outputAnimations.mkdir();
+
+            Utils.clearDirectory(outputAnimations);
+
+            if(folders == null || folders.length == 0) break animation;
+
+            System.out.println("Found "+folders.length+" animation directories to process.");
+
+            int progress = 0;
+            for(File dir : folders) {
+                progress++;
+                File[] frames = dir.listFiles();
+
+                if(frames == null || frames.length == 0) continue;
+
+                Arrays.sort(frames, (f1, f2) -> {
+                    try {
+                        int i1 = Integer.parseInt(f1.getName().replaceAll("[^0-9]", ""));
+                        int i2 = Integer.parseInt(f2.getName().replaceAll("[^0-9]", ""));
+                        return i1 - i2;
+                    } catch(NumberFormatException e) {
+                        e.printStackTrace();
+                        System.err.println("Error occurred. All images must have a numerical filename.");
+                        System.exit(0);
+                        return 0;
+                    }
+                });
+
+                System.out.println("Processing animation directory "+progress+" / "+folders.length);
+
+                int index = 0;
+
+                for(File frame : frames) {
+                    index++;
+                    Utils.copy(frame, new File(outputAnimations.getPath() + File.separator + dir.getName() +" _ " + index+".png"));
+                    if(meta != null) {
+                        Utils.resizeImage(new File(outputAnimations.getPath() + File.separator + dir.getName() +" _ " + index+".png"), meta.getWidth(), meta.getHeight());
+                    }
+                }
+
+            }
+
+        } }
+
         try {
             System.out.println("Backing up directory...");
             Utils.clearDirectory(new File(BACKUP));
