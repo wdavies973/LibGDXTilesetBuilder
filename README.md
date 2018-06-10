@@ -34,7 +34,8 @@ and size. Each `Rendered` directory must also contain a `.meta` file (more on th
   `build-order` (the order this tile-sheet should be processed, this will affect its IDs)  
   
   An example `.meta` file:  
-  ```terrain  
+  ```
+  terrain  
   width: 258  
   height: 194  
   1
